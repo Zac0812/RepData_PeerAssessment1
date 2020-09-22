@@ -6,12 +6,44 @@ output:
 ---
 
 
+##Load our libraries
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(lubridate)
+```
+
 ## Loading and preprocessing the data
 
+```{r}
+df<-read.csv("activity.csv", stringsAsFactors = FALSE,colClasses = c("numeric","Date","integer"), na.strings = "NA")
+df<-df %>% filter(!is.na(steps)) 
+```
 
 
 ## What is mean total number of steps taken per day?
+Note: For this part of the assignment, you can ignore the missing values in the dataset.
 
+1. Calculate the total number of steps taken per day
+```{r, warning=FALSE}
+steps_daily<-df %>% group_by(date) %>% summarise(TotalSteps = sum(steps)) %>% ungroup()
+head(steps_daily)
+```
+
+2. If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
+
+```{r}
+ggplot(steps_daily,aes(x=TotalSteps)) + geom_histogram(bins = 5) + 
+  labs(title ="Histogram of total number of steps per day") + xlab("Total number of steps in a day")
+```
+
+
+3. Calculate and report the mean and median of the total number of steps taken per day
+
+```{r echo=TRUE}
+mean(steps_daily$TotalSteps)
+median(steps_daily$TotalSteps)
+```
 
 
 ## What is the average daily activity pattern?
